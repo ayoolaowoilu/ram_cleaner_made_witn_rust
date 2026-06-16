@@ -1,90 +1,105 @@
-use std::{env, fs, path::Path};
+use std::{env, fs, io::stdin, path::Path};
 
 use crate::resources::paths::CACHE_PATHS;
+
+
 
 mod resources;
 
 struct Display {
-      folders:u32,
-      files:u32,
-      size:f64
+     files:u32,
+     folders:u32,
+     size:f64
 }
 
-fn main() {
+fn main(){
+     let mut stats  = Display {
+          files:0,
+          folders:0,
+          size:0.0
+     };
 
-    let mut stats = Display{
-         folders:0,
-         files:0,
-         size:0.0
-    };
+     let mut input = String::new();
 
-    for path in &CACHE_PATHS {
-        let resolved = resolve_path(path.path);
-        let (files, folders, size) = scan_dir(&resolved);
+      for path in &CACHE_PATHS {
+            let resolved_path = resolve_path(path.path);
+            let (files,folders,size) = scan_dir(&resolved_path);
 
-        stats.size += size as f64  / 1024.0 / 1024.0;
-        stats.files += files as u32;
-        stats.folders += folders as u32;
+             stats.files += files;
+             stats.folders += folders;
+             stats.size += size as f64 / 1024.0 / 1024.0 / 1024.0;
 
-        println!(
-            "[PATH] {} [FILES] {} [FOLDERS] {} [SIZE] {} MB",
-            path.name,
-            files,
-            folders,
-            size as f64 / 1024.0 / 1024.0
-        );
 
-     
-    }
+      }
 
-       println!("\n \n Total cache data found \n Files : {} \n Folders : {} \n Size : {} MB " , stats.files , stats.folders , stats.size)
+      println!("\n Total Cache found: \n \n Files : {} \n Folders : {} \n Total Size : {} GB " , stats.files , stats.folders , stats.size);
+      
+      println!("\n Do u want to clear all cache data ? \n \x1B[35m[info]:\x1B[0m  press -yt to see  where files are been deleted from \n (y/n)?");
+      stdin()
+      .read_line(&mut input)
+      .expect("Failed toad line");
+
+   if input == "y" {
+        println!("yes");
+   }else if input == "n" {
+        println!("No")
+   }
+
+
 }
 
-fn scan_dir(file_path: &str) -> (usize, usize, u64) {
-    let path = Path::new(file_path);
 
-    if !path.exists() {
-        println!("  [SKIP] Does not exist: {}", file_path);
-        return (0, 0, 0);
-    }
+fn scan_dir(path: &str)->(u32,u32,f32){
+       let dir = Path::new(&path); 
 
-    if !path.is_dir() {
-        println!("  [SKIP] Not a directory: {}", file_path);
-        return (0, 0, 0);
-    }
+       if !dir.exists() {
+            return  (0,0,0.0);
+       }
 
-    let entries = match fs::read_dir(path) {
-        Ok(e) => e,
-        Err(e) => {
-            println!("  [DENIED] Cannot access {}: {}", file_path, e);
-            return (0, 0, 0);
-        }
-    };
+       if !dir.is_dir() {
+            return (0,0,0.0);
+       }
 
-    let mut files = 0;
-    let mut folders = 0;
-    let mut total_size = 0u64;
-
-    for entry in entries.filter_map(|e| e.ok()) {
-        let p = entry.path();
-
-        if p.is_dir() {
-            folders += 1;
-        } else if p.is_file() {
-            files += 1;
-            if let Ok(meta) = entry.metadata() {
-                total_size += meta.len();
+       let mut files:u32 = 0;
+       let mut folders:u32 = 0;
+       let mut size:u32 = 0;
+       
+       let count = match  fs::read_dir(dir) {
+            Ok(entry)=> { 
+                 println!("\n \x1B[32m[READ]:\x1B[0m Entry found {}  " , path );
+                entry }
+            ,
+         
+            Err(e) =>{
+                 eprintln!("\n \x1B[31m[ERROR]:\x1B[0m Cannot Read {} , {} " , path , e);
+                 return (0,0,0.0);
             }
-        }
-    }
+       };
 
-    (files, folders, total_size)
+
+       for entry in  count.filter_map(|e| e.ok()) {
+            if entry.path().is_dir() {
+                  folders += 1 ;
+            }else if entry.path().is_file() {
+                   files += 1;
+            }
+
+            if let Ok(meta) = entry.metadata() {
+                 size += meta.len() as u32;
+            }
+       }
+
+
+       return (files , folders , size as f32)
+
+
 }
 
-fn resolve_path(path: &str) -> String {
-    let user = env::var("USERNAME")
-        .or_else(|_| env::var("USER"))
-        .unwrap_or_default();
-
-    path.replace("<user>", &user)
+fn resolve_path(path: &str) -> String{
+      
+      let user = env::var("USERNAME")
+      .or_else(|_| env::var("USER"))
+      .unwrap_or_default();
+      
+      return path.replace("<user>", &user );
 }
