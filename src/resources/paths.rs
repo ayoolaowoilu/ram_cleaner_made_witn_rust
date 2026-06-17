@@ -1,29 +1,29 @@
 pub struct Path {
-  pub   name: &'static str,
+  pub name: &'static str,
    pub path: &'static str,
 }
 
 pub const CACHE_PATHS: [Path; 9] = [
     // chrome
     Path {
-        name: "Google Chrome Cache (Windows)",
+        name: "Google Chrome Cache",
         path: r"C:\Users\<user>\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data",
     },
 
     // fire fox
     Path {
-        name: "Firefox Cache (Windows)",
+        name: "Firefox Cache",
         path: r"C:\Users\<user>\AppData\Local\Mozilla\Firefox\Profiles\<profile>\cache2",
     },
 
 
     Path {
-        name: "Microsoft Edge Cache (Windows)",
+        name: "Microsoft Edge Cache",
         path: r"C:\Users\<user>\AppData\Local\Microsoft\Edge\User Data\Default\Cache",
     },
 
     Path {
-        name: "Opera Cache (Windows)",
+        name: "Opera Cache",
         path: r"C:\Users\<user>\AppData\Local\Opera Software\Opera Stable\Cache",
     },
   
@@ -40,11 +40,11 @@ pub const CACHE_PATHS: [Path; 9] = [
   
 // other apps
     Path {
-        name: "Discord Cache (Windows)",
+        name: "Discord Cache",
         path: r"C:\Users\<user>\AppData\Roaming\discord\Cache",
     },
     Path {
-        name: "Spotify Cache (Windows)",
+        name: "Spotify Cache",
         path: r"C:\Users\<user>\AppData\Local\Spotify\Storage",
     },
     Path {
