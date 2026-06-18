@@ -1,16 +1,19 @@
-use std::{env, fs, io::stdin, path::Path};
+use std::{ io::stdin};
 
-use crate::resources::paths::CACHE_PATHS;
+use crate::{resources::paths::CACHE_PATHS, utils::scan::{resolve_paths, scan_dir}};
 
 
 
 mod resources;
+mod utils;
 
 struct Display {
      files:u32,
      folders:u32,
      size:f64
 }
+
+
 fn main(){
      let mut stats  = Display {
           files:0,
@@ -21,13 +24,13 @@ fn main(){
      let mut input = String::new();
 
       for path in &CACHE_PATHS {
-            let resolved_path = resolve_path(path.path);
-              println!("\n Reading {}...",path.name);
-            let (files,folders,size) = scan_dir(&resolved_path);
+            let resolved_path = resolve_paths(path.path);
+        
+            let (files,folders,size) = scan_dir(&resolved_path, path.name);
            
              stats.files += files;
              stats.folders += folders;
-             stats.size += size as f64 / 1024.0 / 1024.0 / 1024.0;
+             stats.size += ((size as f64 / 1024.0 / 1024.0 / 1024.0) * 100.0 ).round() / 100.0;
 
 
       }
@@ -49,58 +52,3 @@ fn main(){
 }
 
 
-fn scan_dir(path: &str)->(u32,u32,f32){
-       let dir = Path::new(&path); 
-
-       if !dir.exists() {
-          eprintln!("\n \x1B[31m[ERROR]:\x1B[0m Directory not found {}  " , path);
-            return  (0,0,0.0);
-       }
-
-       if !dir.is_dir() {
-             eprintln!("\n \x1B[31m[ERROR]:\x1B[0m Invalid paths {}  " , path);
-            return (0,0,0.0);
-       }
-
-       let mut files:u32 = 0;
-       let mut folders:u32 = 0;
-       let mut size:u32 = 0;
-             
-       let count = match  fs::read_dir(dir) {
-            Ok(entry)=> { 
-
-                 println!("\n \x1B[32m[READ]:\x1B[0m Entry found {}  " , path );
-                entry }
-            ,
-         
-            Err(e) =>{
-                 eprintln!("\n \x1B[31m[ERROR]:\x1B[0m Cannot Read {} , {} " , path , e);
-                 return (0,0,0.0);
-            }
-       };
-       for entry in  count.filter_map(|e| e.ok()) {
-            if entry.path().is_dir() {
-                  folders += 1 ;
-            }else if entry.path().is_file() {
-                   files += 1;
-            }
-
-            if let Ok(meta) = entry.metadata() {
-                 size += meta.len() as u32;
-            }
-       }
-
-
-       return (files , folders , size as f32)
-
-
-}
-
-fn resolve_path(path: &str) -> String{
-      
-      let user = env::var("USERNAME")
-      .or_else(|_| env::var("USER"))
-      .unwrap_or_default();
-      
-      return path.replace("<user>", &user );
-}

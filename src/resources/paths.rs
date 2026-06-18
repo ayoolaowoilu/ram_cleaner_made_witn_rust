@@ -9,14 +9,10 @@ pub const CACHE_PATHS: [Path; 9] = [
         name: "Google Chrome Cache",
         path: r"C:\Users\<user>\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data",
     },
-
-    // fire fox
     Path {
         name: "Firefox Cache",
         path: r"C:\Users\<user>\AppData\Local\Mozilla\Firefox\Profiles\<profile>\cache2",
     },
-
-
     Path {
         name: "Microsoft Edge Cache",
         path: r"C:\Users\<user>\AppData\Local\Microsoft\Edge\User Data\Default\Cache",
@@ -41,7 +37,7 @@ pub const CACHE_PATHS: [Path; 9] = [
 // other apps
     Path {
         name: "Discord Cache",
-        path: r"C:\Users\<user>\AppData\Roaming\discord\Cache",
+        path: r"C:\Users\<user>\AppData\Roaming\discord\Cache\Cache_Data",
     },
     Path {
         name: "Spotify Cache",
@@ -49,6 +45,6 @@ pub const CACHE_PATHS: [Path; 9] = [
     },
     Path {
         name: "VS Code Cache (Windows)",
-        path: r"C:\Users\<user>\AppData\Roaming\Code\Cache",
+        path: r"C:\Users\<user>\AppData\Roaming\Code\Cache\Cache_Data",
     },
 ];
