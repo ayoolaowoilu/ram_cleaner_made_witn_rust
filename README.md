@@ -8,7 +8,7 @@ ram_cleaner
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yourusername/ram_cleaner/main/assets/logo.png" width="120" alt="ram_cleaner logo">
+  <img src="https://raw.githubusercontent.com/ayoolaowoilu/ram_cleaner_made_witn_rust/main/assets/logo.png" width="120" alt="ram_cleaner logo">
 </p>
 
 <h1 align="center">ram_cleaner</h1>
@@ -19,7 +19,7 @@ ram_cleaner
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yourusername/ram_cleaner/main/assets/demo.gif" width="600" alt="Demo">
+  <img src="https://raw.githubusercontent.com/ayoolaowoilu/ram_cleaner_made_witn_rustmain/assets/demo.gif" width="600" alt="Demo">
 </p>
 
 ---
@@ -68,7 +68,7 @@ Installation
 
 From Source
 ~~~~~~~~~~~
-    git clone https://github.com/yourusername/ram_cleaner.git
+    git clone https://github.com/ayoolaowoilu/ram_cleaner_made_witn_rust.git
     cd ram_cleaner
     cargo build --release
     ./target/release/ram_cleaner
