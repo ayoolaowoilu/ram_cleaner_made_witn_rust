@@ -1,6 +1,31 @@
 use std::{env, fs, path::Path};
+use walkdir::WalkDir;
+use regex::Regex;
 
+pub fn collect_cache_files(dir: &str) -> Vec<PathBuf> {
+    let cache_pattern = Regex::new(r"(?i)(cache|\.tmp|\.temp|\.pyc|\.pyo|thumbs\.db|\.ds_store|__pycache__)").unwrap();
+    let mut files = Vec::new();
 
+    for entry in WalkDir::new(dir)
+        .max_depth(3)
+        .follow_links(false)
+        .into_iter()
+        .filter_map(|e| e.ok())
+    {
+        let path = entry.path();
+        if path.is_file() {
+            let name = path.file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("");
+            
+            if cache_pattern.is_match(name) {
+                files.push(path.to_path_buf());
+            }
+        }
+    }
+
+    files
+}
 fn is_cache_file(name: &str) -> bool {
     let lower = name.to_lowercase();
     lower.ends_with(".cache")
