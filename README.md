@@ -192,13 +192,13 @@ Screenshots
 ## Main Menu
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yourusername/ram_cleaner/main/assets/screenshot1.png" width="600" alt="Main Menu">
+  <img src="https://raw.githubusercontent.com/ayoolaowoilu/ram_cleaner_made_witn_rust/main/assets/screenshot1.png" width="600" alt="Main Menu">
 </p>
 
 ## Scan Results
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yourusername/ram_cleaner/main/assets/screenshot2.png" width="600" alt="Scan Results">
+  <img src="https://raw.githubusercontent.com/ayoolaowoilu/ram_cleaner_made_witn_rust/main/assets/screenshot2.png" width="600" alt="Scan Results">
 </p>
 
 ## Dry Run Preview
