@@ -1,6 +1,7 @@
 use std::{env, fs, path::Path};
 use walkdir::WalkDir;
 use regex::Regex;
+use std::path::PathBuf;
 
 pub fn collect_cache_files(dir: &str) -> Vec<PathBuf> {
     let cache_pattern = Regex::new(r"(?i)(cache|\.tmp|\.temp|\.pyc|\.pyo|thumbs\.db|\.ds_store|__pycache__)").unwrap();
